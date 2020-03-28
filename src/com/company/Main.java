@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 public class Main {
-    static void Tablero() {
+    static void MasterMind() {
         Scanner teclado = new Scanner(System.in);
         System.out.print("Escoje un numero de letras de donde seleccionar, por ejemple (2-15):");
         int charToSelect = teclado.nextInt();
@@ -25,19 +25,22 @@ public class Main {
         fillArray(retorna, letrasJugar, partidasNumber);
 
         System.out.println("Tus letras son: " + Arrays.toString(retorna));
+        int contador = 1;
+        System.out.print("Jugada " + contador + ":");
+
+        int miJugada = teclado.nextInt();
     }
 
-
-    public static void fillArray(char toSelect[], int inputJugada, int Cuatesjugadas) {
+    public static char[] fillArray(char toSelect[], int inputJugada, int Cuatesjugadas) {
         char Tablero[] = new char[inputJugada * Cuatesjugadas];
         for (int i = 0; i < Tablero.length; i++) {
             Tablero[i] += toSelect[(int) (Math.random() * toSelect.length)];
         }
-        System.out.println(Arrays.toString(Tablero));
+        return Tablero;
     }
 
 
     public static void main(String[] args) {
-        Tablero();
+        MasterMind();
     }
 }

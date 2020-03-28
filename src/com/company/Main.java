@@ -13,7 +13,7 @@ public class Main {
         int letrasJugar = teclado.nextInt();
 
 
-        System.out.print("Numero maximo de jugadas antes de terminar la partida");
+        System.out.print("Numero maximo de jugadas antes de terminar la partida: ");
         int partidasNumber = teclado.nextInt();
 
 
@@ -22,16 +22,18 @@ public class Main {
         for (int i = 0; i < retorna.length; i++) {
             retorna[i] = Colors[i];
         }
-        fillArray(retorna, letrasJugar, partidasNumber);
 
         System.out.println("Tus letras son: " + Arrays.toString(retorna));
         int contador = 1;
         System.out.print("Jugada " + contador + ":");
 
         int miJugada = teclado.nextInt();
+
+        fillArray(retorna, letrasJugar, partidasNumber);//Hey
     }
 
     public static char[] fillArray(char toSelect[], int inputJugada, int Cuatesjugadas) {
+        char[] copyV = Arrays.copyOf(toSelect, toSelect.length);//Ineficiente Borrar
         char Tablero[] = new char[inputJugada * Cuatesjugadas];
         for (int i = 0; i < Tablero.length; i++) {
             Tablero[i] += toSelect[(int) (Math.random() * toSelect.length)];
@@ -39,8 +41,19 @@ public class Main {
         return Tablero;
     }
 
+    public static void juego(char tablero[], char input[]) {
+        for (int i = 0; i < input.length; i++) {
+            if (tablero[i] == input[i]) {
+                System.out.println(i);
+                //Posiciones iguales, retorna las negras
+            }
+        }
+    }
 
     public static void main(String[] args) {
-        MasterMind();
+//        MasterMind();
+        char[] Colors = {'A', 'B', 'C', 'D', 'E'};
+        char[] jugada = {'A', 'B', 'E', 'D'};
+        juego(Colors, jugada);
     }
 }

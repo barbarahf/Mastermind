@@ -41,19 +41,24 @@ public class Main {
         return Tablero;
     }
 
-    public static void juego(char tablero[], char input[]) {
+    public static void juego(char tablero[], char input[]) {//Posiciones iguales, retorna las negras
         for (int i = 0; i < input.length; i++) {
             if (tablero[i] == input[i]) {
-                System.out.println(i);
-                //Posiciones iguales, retorna las negras
+                System.out.println(i + "  Acertada, Blanca");
+            } else {//Ojo con esto, no es factible
+                for (int j = 0; j < input.length; j++) {
+                    if (tablero[j] == input[i]) {
+                        System.out.println(i + "  Acertada, negra");
+                    }
+                }
             }
         }
     }
 
     public static void main(String[] args) {
 //        MasterMind();
-        char[] Colors = {'A', 'B', 'C', 'D', 'E'};
-        char[] jugada = {'A', 'B', 'E', 'D'};
+        char[] Colors = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',};
+        char[] jugada = {'A', 'B', 'D', 'D'};
         juego(Colors, jugada);
     }
 }

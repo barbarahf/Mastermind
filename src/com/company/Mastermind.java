@@ -1,16 +1,15 @@
 package com.company;
 
-
 import java.util.Arrays;
 import java.util.Scanner;
 
 public class Mastermind {
     public static void MasterMind() {
         Scanner teclado = new Scanner(System.in);
-        System.out.print("Escoje un numero de letras de donde seleccionar, por ejemple (2-15):");
+        System.out.print("Escoje un numero de letras de donde seleccionar, por ejemple (2-6):");
 //        int charToSelect = teclado.nextInt();
         int charToSelect = 2;
-        System.out.print("Escoje un numero de letras para jugar por ejemple (1-15):");
+        System.out.print("Escoje un numero de letras para jugar por ejemple (1-6):");
 //        int letrasJugar = teclado.nextInt();
         int letrasJugar = 4;
 
@@ -23,19 +22,14 @@ public class Mastermind {
         for (int i = 0; i < retorna.length; i++) {
             retorna[i] = Colors[i];
         }
-        System.out.println(" ");
         System.out.println("Tus letras son: " + Arrays.toString(retorna));
-        //Jugada
-        System.out.println("Jugada :");
-        String s = "CABB";//Scanner da error al pasar next line
-        System.out.println(Arrays.toString(tablero(retorna, letrasJugar, partidasNumber)));
-        juego(tablero(retorna, letrasJugar, partidasNumber), inputJugada(s));
-
-
+        juego(tablero(Colors, letrasJugar, partidasNumber), inputJugada(), partidasNumber);
     }
 
-    //Jugada array char
-    public static char[] inputJugada(String jugada) {
+    public static char[] inputJugada() {
+        Scanner teclado = new Scanner(System.in);
+        System.out.println("Jugada :");
+        String jugada = teclado.nextLine();
         char[] miJugada = new char[jugada.length()];
         for (int i = 0; i < jugada.length(); i++) {
             miJugada[i] = jugada.charAt(i);
@@ -44,34 +38,38 @@ public class Mastermind {
         return miJugada;
     }
 
-    //Tablero
     public static char[] tablero(char v[], int jugada, int Cuantasjugadas) {
         char[] tablero = new char[jugada * Cuantasjugadas];
 //        for (int i = 0; i < tablero.length; i++) {
 //            tablero[i] += v[(int) (Math.random() * v.length)];
 //        }
-        tablero = new char[]{'B', 'A', 'B', 'C'};
-
+        tablero = new char[]{'B', 'A', 'B', 'B', 'B', 'A', 'B', 'A'};
+        System.out.print("este es el tablero" + Arrays.toString(tablero));
+        System.out.println("");
         return tablero;
     }
 
-    //JUEGO
-    public static void juego(char tablero[], char jugada[]) {//Posiciones iguales, retorna las negras
+    public static void juego(char tablero[], char jugada[], int numPartidas) {//Posiciones iguales, retorna las negras
+        char[] v = new char[tablero.length];
+        System.arraycopy(tablero, 0, v, 0, tablero.length);
         for (int i = 0; i < jugada.length; i++) {
-            if (tablero[i] == jugada[i]) {
-                System.out.println(i + "  Acertada, Blanca");
+            if (v[i] == jugada[i]) {
+                System.out.print(i + " Acertada, Blanca ");
             } else {//Ojo con esto, no es factible
                 for (int j = 0; j < jugada.length; j++) {
-                    if (tablero[j] == jugada[i]) {
-                        System.out.println(i + "  Acertada, negra");
+                    if (v[j] == jugada[i]) {
+                        System.out.print(i + " negra ");
                     }
                 }
             }
+        }
+        if (numPartidas > 1) {
+            numPartidas--;
+            juego(v, inputJugada(), numPartidas);
         }
     }
 
     public static void main(String[] args) {
         MasterMind();
-        System.out.println();
     }
 }

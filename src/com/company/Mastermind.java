@@ -2,20 +2,22 @@ package com.company;
 
 import java.util.Arrays;
 import java.util.Scanner;
+import java.util.*;
 
 public class Mastermind {
+    public static int contador = 0;
+
     public static void MasterMind() {
+
         Scanner teclado = new Scanner(System.in);
         System.out.print("Escoje un numero de letras de donde seleccionar, por ejemple (2-6):");
-//        int charToSelect = teclado.nextInt();
-        int charToSelect = 2;
+        int charToSelect = teclado.nextInt();
+
         System.out.print("Escoje un numero de letras para jugar por ejemple (1-6):");
-//        int letrasJugar = teclado.nextInt();
-        int letrasJugar = 4;
+        int letrasJugar = teclado.nextInt();
 
         System.out.print("Numero maximo de jugadas antes de terminar la partida: ");
-//        int partidasNumber = teclado.nextInt();
-        int partidasNumber = 2;
+        int partidasNumber = teclado.nextInt();
 
         char[] Colors = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O'};
         char[] retorna = new char[charToSelect];
@@ -23,12 +25,13 @@ public class Mastermind {
             retorna[i] = Colors[i];
         }
         System.out.println("Tus letras son: " + Arrays.toString(retorna));
-        juego(tablero(Colors, letrasJugar, partidasNumber), inputJugada(), partidasNumber);
+        juego(tablero(retorna, letrasJugar), inputJugada(), partidasNumber);
     }
 
     public static char[] inputJugada() {
         Scanner teclado = new Scanner(System.in);
-        System.out.println("Jugada :");
+        contador++;
+        System.out.println("Jugada " + contador + " : ");
         String jugada = teclado.nextLine();
         char[] miJugada = new char[jugada.length()];
         for (int i = 0; i < jugada.length(); i++) {
@@ -38,35 +41,41 @@ public class Mastermind {
         return miJugada;
     }
 
-    public static char[] tablero(char v[], int jugada, int Cuantasjugadas) {
-        char[] tablero = new char[jugada * Cuantasjugadas];
-//        for (int i = 0; i < tablero.length; i++) {
-//            tablero[i] += v[(int) (Math.random() * v.length)];
-//        }
-        tablero = new char[]{'B', 'A', 'B', 'B', 'B', 'A', 'B', 'A'};
-        System.out.print("este es el tablero" + Arrays.toString(tablero));
-        System.out.println("");
+    public static char[] tablero(char v[], int jugada) {
+        char[] tablero = new char[jugada];
+        for (int i = 0; i < tablero.length; i++) {
+            tablero[i] += v[(int) (Math.random() * v.length)];
+        }
+        System.out.println("este es el tablero" + Arrays.toString(tablero));
         return tablero;
     }
 
-    public static void juego(char tablero[], char jugada[], int numPartidas) {//Posiciones iguales, retorna las negras
-        char[] v = new char[tablero.length];
-        System.arraycopy(tablero, 0, v, 0, tablero.length);
-        for (int i = 0; i < jugada.length; i++) {
-            if (v[i] == jugada[i]) {
-                System.out.print(i + " Acertada, Blanca ");
-            } else {//Ojo con esto, no es factible
-                for (int j = 0; j < jugada.length; j++) {
-                    if (v[j] == jugada[i]) {
-                        System.out.print(i + " negra ");
-                    }
-                }
+    public static void juego(char tablero[], char jugada[], int numPartidas) {
+        int blancas = 0;
+        int negras = 0;
+        for (int i = 0, j = 0; i < jugada.length; i++) {
+            if (tablero[i] == jugada[i]) {
+                blancas++;
+            } else if (tablero[j] == jugada[i]) {
+                negras++;
+                j++;
             }
         }
-        if (numPartidas > 1) {
-            numPartidas--;
-            juego(v, inputJugada(), numPartidas);
+        if (blancas >= 1 && blancas != jugada.length) {
+            System.out.print(blancas + "B ");
+        } else if (negras >= 1) {
+            System.out.print(blancas + "B ");
+        } else if (blancas == jugada.length) {
+            System.out.println("Felicidades, has encontrado la combinacion en el intento " + contador);
         }
+        if (numPartidas > 1 && blancas != jugada.length) {
+            numPartidas--;
+            juego(tablero, inputJugada(), numPartidas);
+        } else if (numPartidas == 1) {
+            System.out.println("Lo siento, no has acerdado, intenta jugar otra vez");
+        }
+
+
     }
 
     public static void main(String[] args) {

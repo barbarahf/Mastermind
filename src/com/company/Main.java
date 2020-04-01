@@ -22,28 +22,48 @@ public class Main {
         return v;
     }
 
-    private static String[] pensaLletres(char[] lletres, int quantes) {
+    private static char[] pensaLletres(char[] lletres, int quantes) {
+        int save = 1;
         char[] tablero = new char[quantes];
-//        for (int i = 0; i < tablero.length; i++) {
-//            tablero[i] += lletres[(int) (Math.random() * lletres.length)];
-//        }
-        HashSet<Character> uniqueCharSet = new HashSet<Character>();
-        for (char each : lletres) {
-            uniqueCharSet.add(each);
+        for (int i = 0; i < tablero.length; i++) {
+            tablero[i] += lletres[(int) (Math.random() * lletres.length)];
         }
+        return tablero;
+    }
 
-        String[] v = new String[uniqueCharSet.size()];
-        v = uniqueCharSet.toArray(v);
-        return v;
+    public static String s(String string) {
+        List<String> letters = Arrays.asList(string.split(""));
+        Collections.shuffle(letters);
+        String shuffled = "";
+        for (String letter : letters) {
+            shuffled += letter;
+        }
+        return shuffled;
+    }
+
+    static char[] passaVector(String s) {
+        char[] miJugada = new char[s.length()];
+        for (int i = 0; i < s.length(); i++) {
+            miJugada[i] = s.charAt(i);
+        }
+        return miJugada;
+    }
+
+    private static char[] pensaLletress(char[] lletres, int quantes) {
+        String string = passaCadena(lletres);
+        List<String> letters = Arrays.asList(string.split(""));
+        Collections.shuffle(letters);
+        String shuffled = "";
+        for (String letter : letters) {
+            shuffled += letter;
+        }
+        return passaVector(shuffled.substring(0, quantes));
     }
 
     public static void main(String[] args) {
 
-        char[] lletres = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',};
-        String s = "ABACEAA";
-
-
-        System.out.println(Arrays.toString(pensaLletres(lletres, 5)));
+        char[] lletres = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'};
+        System.out.println(Arrays.toString(pensaLletress(lletres, 8)));
     }
 
 }

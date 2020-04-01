@@ -13,38 +13,29 @@ public class finalC {
     private static char[] pensat;      // Manté un array amb la combinació que ha pensat la màquina (Ex: [B,A,C,A])
 
 
-    private static boolean contingudes(char[] lletres, String s) {//Input Comprobar
-//        int count = 0;
-//        for (int i = 0; i < s.length(); i++) {
-//            for (int j = 0; j < lletres.length; j++) {
-//                if (lletres[j] == s.charAt(i)) {
-//                    count++;
-//                }
-//            }
-//        }
-//        if (count == s.length())
-//            return true;
-//        return false;
+    private static boolean contingudes(char[] lletres, String s) {
         String cadena = passaCadena(lletres);
         return cadena.contains(s);
     }
 
     private static char[] pensaLletres(char[] lletres, int quantes) {
-        // Li pasem en quantes el número de lletres que hem de pensar, i retorna un vector de
-        // longitud quantes, amb les lletres pensades, escollides (sense repetir) de lletres
-//        char[] tablero = new char[quantes];
-//        for (int i = 0; i < tablero.length; i++) {
-//            tablero[i] += lletres[(int) (Math.random() * lletres.length)];
-//        }
-//
-//        return tablero;
-        return lletres;
+        String string = passaCadena(lletres);
+        List<String> letters = Arrays.asList(string.split(""));
+        Collections.shuffle(letters);
+        String shuffled = "";
+        for (String letter : letters) {
+            shuffled += letter;
+        }
+        return passaVector(shuffled.substring(0, quantes));
     }
-    //    private static char[] pensaRepetides(char[] lletres, int quantes) {
-//        // Li pasem en quantes el número de lletres que hem de pensar, i retorna un vector de
-//        // longitud quantes, amb les lletres pensades, escollides (repetint les lletres)
-//
-//    }
+
+    private static char[] pensaRepetides(char[] lletres, int quantes) {
+        char[] tablero = new char[quantes];
+        for (int i = 0; i < tablero.length; i++) {
+            tablero[i] += lletres[(int) (Math.random() * lletres.length)];
+        }
+        return tablero;
+    }
 
     private static void llegeixDades() {
         Scanner teclado = new Scanner(System.in);
@@ -69,33 +60,48 @@ public class finalC {
         return v;
     }
 
-//    static boolean properaJugada() {
-//        // Demana a l'usuari que introdueixi la propera jugada, i la compara amb la jugada que ha pensat
-//        // el programa.  Li diu a l'usuari les lletres que té be i les que té regular (està la lletra però
-//        // mal posada)
-//        // Incrementa el número de jugades, i si l'usuari encerta totes les lletres, li felicita i retorna
-//        // true, indicant que s'ha acabat la partida.  En cas contrari, retorna false per continuar jugant.
-//    }
+    // // Pide al usuario que introduzca la próxima jugada, y la compara con la jugada que ha pensado
+// // el programa. Le dice al usuario las letras que tiene bien y las que tiene regular (está la letra pero
+// // mal puesta)
+// // Incrementa el número de jugadas, y si el usuario acierta todas las letras, le felicita y devuelve
+// // true, indicando que se ha terminado la partida. En caso contrario, devuelve false para continuar jugando.
+    static boolean properaJugada() {
+        Scanner teclado = new Scanner(System.in);
+        System.out.print("\n Jugada " + numJugada + " : ");
+        String s = teclado.nextLine();
+        jugada = passaVector(s);
+        int B = 0;
+        int R = 0;
+        for (int i = 0, j = 0; i < jugada.length; i++) {
+            if (pensat[i] == jugada[i]) {
+                B++;
+            } else if (pensat[j] == jugada[i]) {
+                R++;
+                j++;
+            }
+        }
+
+        return false;
+    }
 
 
 //    private static int llegeixInt(String missatge, int min, int max) {
-//        // Llegeix un enter positiu entre min i max amb control d'errors.  No retorna de la funció
-//        // fins que el valor llegit és vàlid.  Proporciona els missatges d'error convenients
+
 //
-//    }
+//    }?????
 
     public static void main(String[] args) {
         // Programa principal, s'indica complet a falta de les funcions
-//        llegeixDades();
-//        if (!repetirLletres)
-//            pensat = pensaLletres(lletres, lletresJugar);
-//        else
-//            pensat = pensaRepetides(lletres, lletresJugar);
-//        // Si volem saber les lletres que s'han pensat, descomentar
-//        // System.out.println(java.util.Arrays.toString(pensat));
-//        while (!properaJugada() && numJugada <= jugadasMax) ;
-//        if (numJugada > jugadasMax)
-//            System.out.println("Ho sento, no l'has encertat.  Torna a jugar");
+        llegeixDades();
+        if (!repetirLletres)
+            pensat = pensaLletres(lletres, lletresJugar);
+        else
+            pensat = pensaRepetides(lletres, lletresJugar);
+        // Si volem saber les lletres que s'han pensat, descomentar
+        // System.out.println(java.util.Arrays.toString(pensat));
+        while (!properaJugada() && numJugada <= jugadasMax) ;
+        if (numJugada > jugadasMax)
+            System.out.println("Ho sento, no l'has encertat.  Torna a jugar");
     }
 }
 

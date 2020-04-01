@@ -8,7 +8,7 @@ public class finalC {
     private static int numJugada = 1;   // Número de la jugada actual, 1 per a la primera jugada
     private static int jugadasMax;      // Número màxim de jugades que farem
     private static boolean repetirLletres = false;      // No es deixen repetir lletres a la combinació (o si)
-    private static char[] lletres; // Manté un array amb totes les lletres possibles  (Ex:  [A,B,C,D,E,F])
+    private static char[] lletres = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O'};
     private static char[] jugada;      // Manté un array amb la jugada actual	(Ex:  [A,C,A,F]
     private static char[] pensat;      // Manté un array amb la combinació que ha pensat la màquina (Ex: [B,A,C,A])
 
@@ -80,15 +80,28 @@ public class finalC {
                 j++;
             }
         }
+        if (B >= 1 && B != jugada.length) {
+            System.out.print(B + "B ");
+        } else if (R >= 1) {
+            System.out.print(B + "B ");
+        } else if (B == jugada.length) {
+            System.out.println("Felicidades, has encontrado la combinacion en el intento " + numJugada);
+            return true;
+        }
+        if (numJugada > 1 && B != jugada.length) {
+            numJugada--;
+            properaJugada();
+        } else if (numJugada == 1) {
+            System.out.println("Lo siento, no has acerdado, intenta jugar otra vez");
+            return false;
+        }
 
         return false;
     }
 
-
 //    private static int llegeixInt(String missatge, int min, int max) {
-
 //
-//    }?????
+//    }
 
     public static void main(String[] args) {
         // Programa principal, s'indica complet a falta de les funcions
@@ -98,7 +111,7 @@ public class finalC {
         else
             pensat = pensaRepetides(lletres, lletresJugar);
         // Si volem saber les lletres que s'han pensat, descomentar
-        // System.out.println(java.util.Arrays.toString(pensat));
+        System.out.println(java.util.Arrays.toString(pensat));
         while (!properaJugada() && numJugada <= jugadasMax) ;
         if (numJugada > jugadasMax)
             System.out.println("Ho sento, no l'has encertat.  Torna a jugar");

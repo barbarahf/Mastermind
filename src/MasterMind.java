@@ -13,59 +13,57 @@ public class MasterMind {
     static Scanner teclado = new Scanner(System.in).useDelimiter("\n"); //Scanner global
 
     private static void llegeixDades() {
-        String missatge = "Escoge un numero de letras de donde seleccionar, por ejemple (2-15): ";
+        System.out.println("PROGRAMA MASTERMIND AMB LLETRES, HAS ENDEVINAR LA COMBINACIÓ QUE PENSARÉ");
+        String missatge = "Escull un nombre de lletres d'on seleccionar, per exemple (2-15): ";
         lletresEscollir = llegeixInt(missatge, 2, 15);
         String letras = "ABCDEFGHIJKLMNO";
         letras = letras.substring(0, lletresEscollir);
         lletres = passaVector(letras);
-        String missatge2 = "Escoge un numero de letras para jugar, por ejemplo (1-15): ";
+        String missatge2 = "Escull un nombre de lletres per jugar, per exemple (1-15): ";
         lletresJugar = llegeixInt(missatge2, 1, 15);
 
-
         if (lletresEscollir > lletresJugar) {
-            Scanner teclado = new Scanner(System.in);
-            System.out.print("Vols que hi hagi lletres repetides en el joc? S/N:  ");
-            boolean aux;//Podria mejorarse con InputMismatchException?catch try what wateva
+            String sn;
             do {
-                aux = true;
-                String input = teclado.nextLine();
-                if ("S".contains(input))
+                System.out.print("Vols que hi hagi lletres repetides en el joc? S/N:  ");
+                sn = teclado.nextLine();
+                if (sn.equals("S")) {
+                    System.out.println("Hi haurà lletres repetides en la combinació per encertar");
                     repetirLletres = true;
-                else if ("N".contains(input))
+                } else if (sn.equals("N")) {
+                    System.out.println("No hi haurà lletres repetides en la combinació per encertar");
                     repetirLletres = false;
-                else {
-                    System.out.print("Error de input, intente con S o N: ");
-                    aux = false;
                 }
-            } while (!aux);
+            } while (!(sn.matches("N") || sn.matches("S")));
         }
 
 
-        System.out.print("Numero maximo de jugadas antes de terminar la partida 1/100: ");
-        jugadasMax = teclado.nextInt();
+        String missatge3 = "Nombre màxim de jugades abans d'acabar la partida 1/100: ";
+        jugadasMax = llegeixInt(missatge3, 1, 100);
 
 
-        System.out.println("Introdueix un total" + lletresJugar + " de lletres entre les que s'indiquen a continuació: ");
+        System.out.println("Introdueix un total " + lletresJugar + " de lletres entre les que s'indiquen a continuació: ");
         System.out.println(Arrays.toString(lletres));
     }
 
-
     private static int llegeixInt(String missatge, int min, int max) {
-        int intro;
+        String intro;
         do {
             System.out.print(missatge);
-            intro = teclado.nextInt();
-        } while (intro < min || intro > max);
-        return intro;
+            intro = teclado.nextLine();
+        } while (!intro.matches("[0-9]*") || intro.contains(" ") || intro.equals("")
+                || intro.length() > 4 || Integer.parseInt(intro) < min || Integer.parseInt(intro) > max);
+        return Integer.parseInt(intro);
     }
 
-    private static boolean contingudes(char[] lletres, String s) {//Comprobar inputs
-        String cadena = passaCadena(lletres);
-        String r = cadena.toUpperCase();
-        return r.contains(s);
+    private static boolean contingudes(char[] lletres, String s) {
+        for (int i = 0; i < s.length(); i++)
+            if (passaCadena(lletres).indexOf(s.charAt(i)) == -1) {
+                System.out.println("El valor introduit '" + s.charAt(i) + "' en la posició " + (i + 1) + " no és vàlid.");
+                return false;
+            }
+        return true;
     }
-/////////////////////////////////////////////////////////////////
-
 
     private static char[] pensaLletres(char[] lletres, int quantes) {
         String string = passaCadena(lletres);
@@ -73,7 +71,8 @@ public class MasterMind {
         Collections.shuffle(letters);
         String shuffled = "";
         for (String letter : letters) shuffled += letter;
-        return passaVector(shuffled.substring(0, quantes));
+        String s = shuffled.substring(0, quantes);//Por alguna razon el subString me daba error
+        return passaVector(s);
     }
 
     private static char[] pensaRepetides(char[] lletres, int quantes) {
@@ -97,11 +96,13 @@ public class MasterMind {
     }
 
     static boolean properaJugada() {
-        Scanner teclado = new Scanner(System.in);
-        System.out.print("Jugada " + numJugada + " : ");
-        String s = teclado.nextLine();
+        String s;
+        do {
+            System.out.print("\nJugada " + numJugada + " : ");
+            s = teclado.nextLine();
+        } while (!contingudes(lletres, s) || s.length() > lletresJugar || s.length() < lletresJugar);
+
         jugada = passaVector(s);
-        /*Todo esto control de errores*/
         int B = 0, R = 0;
         for (int i = 0; i < jugada.length; i++) {
             if (pensat[i] == jugada[i]) {
@@ -123,6 +124,7 @@ public class MasterMind {
             return true;
         }
         numJugada++;
+
         return false;
     }
 
@@ -135,10 +137,12 @@ public class MasterMind {
 
         System.out.println(java.util.Arrays.toString(pensat));
 
-        while (!properaJugada() && numJugada < jugadasMax) {
+        do {
             properaJugada();
-        }
+        } while (!properaJugada() && numJugada <= jugadasMax);
         if (numJugada > jugadasMax)
             System.out.println("\nHo sento, no l'has encertat.  Torna a jugar");
+
     }
 }
+
